@@ -22,20 +22,30 @@ public class Game : MonoBehaviour
         _personsManager = FindObjectOfType<PersonsManager>();
     }
 
+    void Start()
+    {
+        // temp for fast run
+        OnStartButtonHandler();
+    }
+
 
     void OnEnable()
     {
         PersonsManager.OnEnemyCollideWithPerson += OnEnemyCollideWithPersonHandler;
+
         GameUiManager.OnStartButtonClick += OnStartButtonHandler;
         GameUiManager.OnRestartButtonClick += OnRestartButtonHandler;
+
         Ground.OnClickByGround += OnClickByGroundHandler;
     }
 
     void OnDisable()
     {
         PersonsManager.OnEnemyCollideWithPerson -= OnEnemyCollideWithPersonHandler;
+
         GameUiManager.OnStartButtonClick -= OnStartButtonHandler;
         GameUiManager.OnRestartButtonClick -= OnRestartButtonHandler;
+
         Ground.OnClickByGround -= OnClickByGroundHandler;
     }
 
@@ -43,6 +53,14 @@ public class Game : MonoBehaviour
     {
         if (!_gameIsStarted)
         {
+            return;
+        }
+
+        bool isPersonSelected = _personsManager.GetIsPersonSelected();
+
+        if (isPersonSelected)
+        {
+            _personsManager.MoveSelectedPersonTo(mousePosition);
             return;
         }
 
